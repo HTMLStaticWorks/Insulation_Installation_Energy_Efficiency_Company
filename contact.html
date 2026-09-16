@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact & Free Assessment | Thermova</title>
+    <meta name="description" content="Request a free assessment and find out where your building is losing energy.">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .hero-contact {
+            padding-top: 150px;
+            padding-bottom: 80px;
+            background-color: var(--bg-secondary);
+            text-align: center;
+            min-height: 450px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Contact Grid Layout */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Premium Form */
+        .contact-form-wrapper {
+            background: var(--bg-card);
+            padding: 3rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            border-radius: var(--border-radius-md);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            resize: vertical;
+            min-height: 150px;
+        }
+        
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--clr-lime-accent);
+        }
+
+        /* Contact Info */
+        .contact-info-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            height: 100%;
+        }
+
+        .info-card {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--border-color);
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-icon {
+            color: var(--clr-energy-green);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Final CTA */
+        .cta-standard {
+            background-color: var(--clr-charcoal);
+            color: white;
+            text-align: center;
+            padding: 8rem 0;
+            border-radius: var(--border-radius-lg);
+            margin-bottom: 4rem;
+        }
+        .cta-standard h2, .cta-standard p {
+            color: white;
+        }
+
+        /* Accordion Styles */
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .accordion-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all var(--transition-base);
+        }
+
+        .accordion-item:hover {
+            border-color: var(--clr-lime-accent);
+        }
+
+        .accordion-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-heading);
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: left;
+        }
+        [dir="rtl"] .accordion-header { text-align: right; }
+
+        .accordion-icon {
+            flex-shrink: 0;
+            transition: transform var(--transition-fast);
+            color: var(--clr-energy-green);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-base), padding var(--transition-base);
+            padding: 0 1.5rem;
+        }
+        
+        .accordion-content p {
+            margin-bottom: 0;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all var(--transition-base);
+        }
+
+        /* Active State */
+        .accordion-item.active {
+            box-shadow: var(--shadow-sm);
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 500px;
+            padding-bottom: 1.5rem;
+        }
+        .accordion-item.active .accordion-content p {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 1024px) {
+            .contact-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .contact-form-wrapper { padding: 1.5rem; }
+            .contact-form-wrapper .btn { white-space: nowrap; padding-left: 1rem; padding-right: 1rem; }
+            .info-card > div > strong { white-space: nowrap; font-size: 0.95rem; }
+            .info-card > div > span { font-size: 0.95rem; }
+        }
+    </style>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2384cc16' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="index.html" class="nav-brand">
+                <i data-lucide="shield-check" class="nav-logo-svg" style="color: var(--clr-energy-green)"></i>
+                <div class="brand-text-wrapper">
+                    <span class="brand-name">THERMOVA</span>
+                    <span class="brand-desc">Insulation & Energy</span>
+                </div>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="home-2.html" class="nav-link">Home 2</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="energy-calculator.html" class="nav-link">Calculator</a>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+                <a href="contact.html" class="nav-link active">Contact</a>
+            </div>
+                                                <div class="nav-controls">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i data-lucide="moon"></i>
+                </button>
+                <button id="rtl-toggle" class="icon-btn" aria-label="Toggle RTL">
+                    <i data-lucide="arrow-left-right"></i>
+                </button>
+                <a href="#" class="btn btn-primary" data-modal-trigger="assessment">Free Assessment <i data-lucide="arrow-right"></i></a>
+            </div>
+            <button id="hamburger-menu" class="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>    <!-- Mobile Side Menu -->
+    <div id="side-menu" class="side-menu">
+        <div class="side-menu-header">
+            <a href="index.html" class="nav-brand">
+                <i data-lucide="shield-check" class="nav-logo-svg" style="color: var(--clr-energy-green)"></i>
+                <div class="brand-text-wrapper">
+                    <span class="brand-name">THERMOVA</span>
+                    <span class="brand-desc">Insulation & Energy</span>
+                </div>
+            </a>
+            <button id="side-menu-close" class="icon-btn" aria-label="Close Menu">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="home-2.html" class="nav-link">Home 2</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="services.html" class="nav-link">Services</a>
+            <a href="energy-calculator.html" class="nav-link">Calculator</a>
+            <a href="pricing.html" class="nav-link">Pricing</a>
+            <a href="contact.html" class="nav-link active">Contact</a>
+        </div>
+        <div class="side-menu-controls">
+            <div class="side-menu-toggles">
+                <button id="theme-toggle-mobile" class="icon-btn" aria-label="Toggle Theme">
+                    <i data-lucide="moon"></i>
+                </button>
+                <button id="rtl-toggle-mobile" class="icon-btn" aria-label="Toggle RTL">
+                    <i data-lucide="arrow-left-right"></i>
+                </button>
+            </div>
+            <a href="#" class="btn btn-primary" data-modal-trigger="assessment" style="width: 100%;">Free Assessment <i data-lucide="arrow-right"></i></a>
+        </div>
+    </div>
+
+    <main>
+        <!-- Section 01: Hero -->
+        <section class="hero-contact">
+            <div class="container reveal">
+                <span class="eyebrow">GET IN TOUCH</span>
+                <h1 style="max-width: 800px; margin: 0 auto;">Let's Find Where Your Building Is Losing Energy.</h1>
+                <p style="max-width: 600px; margin: 1.5rem auto 0; font-size: 1.125rem;">Request a free assessment and tell us about your property. Our experts will help you identify the best insulation solutions.</p>
+            </div>
+        </section>
+
+        <!-- Section 02 & 03: Form & Contact Info -->
+        <section class="section-padding container">
+            <div class="contact-grid">
+                
+                <!-- Free Assessment Form -->
+                <div class="contact-form-wrapper reveal">
+                    <h3 style="margin-bottom: 2rem;">Request Free Assessment</h3>
+                    <form id="contact-form" action="#" method="POST" onsubmit="event.preventDefault(); alert('Form submitted successfully!'); this.reset();">
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="c-name">Full Name *</label>
+                                <input type="text" id="c-name" required placeholder="John Doe">
+                            </div>
+                            <div class="form-group">
+                                <label for="c-email">Email Address *</label>
+                                <input type="email" id="c-email" required placeholder="john@example.com">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="c-phone">Phone Number *</label>
+                                <input type="tel" id="c-phone" required placeholder="(555) 000-0000">
+                            </div>
+                            <div class="form-group">
+                                <label for="c-zip">ZIP / Postal Code *</label>
+                                <input type="text" id="c-zip" required placeholder="10001">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="c-type">Property Type</label>
+                                <select id="c-type">
+                                    <option>Single Family Home</option>
+                                    <option>Apartment / Condo</option>
+                                    <option>Commercial Building</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="c-size">Approx. Size (Sq Ft)</label>
+                                <input type="number" id="c-size" placeholder="2000">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="c-condition">Current Insulation Condition</label>
+                                <select id="c-condition">
+                                    <option>Poor (Very Drafty)</option>
+                                    <option>Average (Inconsistent)</option>
+                                    <option>Good (Needs minor update)</option>
+                                    <option>Unknown</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="c-service">Preferred Service</label>
+                                <select id="c-service">
+                                    <option>Full Assessment (Not Sure)</option>
+                                    <option>Attic Insulation</option>
+                                    <option>Wall Insulation</option>
+                                    <option>Spray Foam</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="c-method">Preferred Contact Method</label>
+                            <select id="c-method">
+                                <option>Phone Call</option>
+                                <option>Email</option>
+                                <option>Text Message</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="c-message">Additional Details</label>
+                            <textarea id="c-message" placeholder="Tell us more about your building's current issues..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Request Free Assessment <i data-lucide="arrow-right"></i></button>
+                    </form>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="contact-info-wrapper reveal">
+                    <div class="info-card">
+                        <h3 style="margin-bottom: 2rem;">Contact Information</h3>
+                        
+                        <div class="info-item">
+                            <i data-lucide="building" class="info-icon"></i>
+                            <div>
+                                <strong>THERMOVA INSULATION & ENERGY</strong>
+                                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">(Fictional Placeholder Co.)</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i data-lucide="phone" class="info-icon"></i>
+                            <div>
+                                <strong>Phone</strong>
+                                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">+1 (000) 000-0000</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i data-lucide="mail" class="info-icon"></i>
+                            <div>
+                                <strong>Email</strong>
+                                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;"><a href="mailto:hello@example.com">hello@example.com</a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i data-lucide="map-pin" class="info-icon"></i>
+                            <div>
+                                <strong>Service Area</strong>
+                                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">Your City & Surrounding Areas</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3 style="margin-bottom: 1.5rem;">Service Hours</h3>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
+                            <span>Monday - Friday</span>
+                            <strong>8:00 AM – 6:00 PM</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
+                            <span>Saturday</span>
+                            <strong>9:00 AM – 2:00 PM</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Sunday</span>
+                            <strong>Closed</strong>
+                        </div>
+                    </div>
+
+                    <!-- Map Card -->
+                    <div class="info-card" style="flex: 1; padding: 0; overflow: hidden; min-height: 250px; display: flex; flex-direction: column;">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.2528001712!2d-74.14448722285116!3d40.69763123326162!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY!5e0!3m2!1sen!2sus!4v1689100000000!5m2!1sen!2sus" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0; flex: 1;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FAQ Accordion -->
+        <section class="section-padding container">
+            <div style="text-align: center; margin-bottom: 3rem;" class="reveal">
+                <span class="eyebrow">FREQUENTLY ASKED QUESTIONS</span>
+                <h2>Have Questions? We Have Answers.</h2>
+            </div>
+            <div class="faq-container reveal">
+                
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false">
+                        How does insulation help reduce energy bills?
+                        <i data-lucide="chevron-down" class="accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Insulation acts as a thermal barrier, slowing the transfer of heat. In winter, it keeps the heat generated by your HVAC system inside. In summer, it prevents the sun's radiant heat from entering. This means your HVAC system runs less often, directly lowering your energy consumption.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false">
+                        How do I know if my attic needs more insulation?
+                        <i data-lucide="chevron-down" class="accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Common signs include uneven temperatures between rooms, high energy bills, drafts in the upper floors, and rapid snow melt on your roof during winter (ice dams). A visual inspection showing insulation below or just at the floor joists is also a clear indicator.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false">
+                        What is spray foam insulation?
+                        <i data-lucide="chevron-down" class="accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Spray foam is a liquid chemical that expands into a solid foam upon application. It provides both high thermal resistance (R-value) and acts as a complete air and moisture barrier. It is ideal for hard-to-reach areas and complete envelope sealing.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false">
+                        Is wall insulation worth upgrading?
+                        <i data-lucide="chevron-down" class="accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Yes. Exterior walls make up a large surface area of your home. If they are poorly insulated, you lose significant energy laterally. We can often install blown-in insulation into existing wall cavities without major demolition.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false">
+                        How long does insulation installation take?
+                        <i data-lucide="chevron-down" class="accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Most standard residential attic installations can be completed in a single day. More complex projects, like whole-house wall injections or extensive spray foam applications, may take 2-4 days.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false">
+                        Can insulation improve indoor comfort?
+                        <i data-lucide="chevron-down" class="accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Absolutely. Beyond energy savings, proper insulation eliminates cold spots, reduces drafts, helps maintain a consistent temperature throughout the house, and can significantly dampen outside noise.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false">
+                        What factors affect insulation pricing?
+                        <i data-lucide="chevron-down" class="accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Pricing is determined by the square footage of the area, the type of material selected (e.g., fiberglass vs. closed-cell spray foam), accessibility of the space, and any required preparation like removing old insulation or air sealing.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false">
+                        Does insulation help with drafts?
+                        <i data-lucide="chevron-down" class="accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Yes, especially when combined with air sealing. Spray foam inherently stops drafts by expanding to fill gaps, while traditional insulation performs best when cracks and penetrations are sealed prior to installation.</p>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- Section 04: CTA -->
+        <section class="container">
+            <div class="cta-standard reveal">
+                <h2 style="max-width: 600px; margin: 0 auto 1.5rem;">Take the First Step Toward Better Efficiency.</h2>
+                <a href="energy-calculator.html" class="btn btn-primary">Calculate Your Savings <i data-lucide="calculator"></i></a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="nav-brand" style="margin-bottom: 1rem;">
+                        <i data-lucide="shield-check" class="nav-logo-svg" style="color: var(--clr-energy-green)"></i>
+                <div class="brand-text-wrapper">
+                    <span class="brand-name">THERMOVA</span>
+                    <span class="brand-desc">Insulation & Energy</span>
+                </div>
+                    </div>
+                    <p>Professional residential and commercial insulation installation focused on improving building comfort and lowering utility bills.</p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Instagram">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        </a>
+                        <a href="#" aria-label="Facebook">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                        </a>
+                        <a href="#" aria-label="X">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="YouTube">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Explore</h4>
+                    <div class="footer-links">
+                        <a href="index.html">Home</a>
+                        <a href="about.html">About</a>
+                        <a href="services.html">Services</a>
+                        <a href="energy-calculator.html">Energy Calculator</a>
+                        <a href="pricing.html">Pricing</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <div class="footer-links">
+                        <a href="contact.html">Contact Us</a>
+                        <a href="#" data-modal-trigger="assessment">Free Assessment</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Get Practical Energy-Saving Tips</h4>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Enter your email" required>
+                        <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.5rem;">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 THERMOVA. All rights reserved.</div>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Modals -->
+    <div id="global-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close"><i data-lucide="x"></i></button>
+            <div id="modal-dynamic-content">
+                <div id="modal-assessment" class="modal-template active">
+                    <h3 style="margin-bottom: 0.5rem;">Let's Improve Your Energy Efficiency</h3>
+                    <p style="margin-bottom: 2rem;">Tell us a little about your building and we'll help you identify the right next step.</p>
+                    <form>
+                        <div class="form-group"><label>Full Name</label><input type="text" placeholder="John Doe"></div>
+                        <div class="form-group"><label>Email Address</label><input type="email" placeholder="john@example.com"></div>
+                        <div class="form-group"><label>Property Type</label><select><option>Single Family Home</option><option>Commercial Building</option></select></div>
+                        <div class="form-group"><label>ZIP / Postal Code</label><input type="text" placeholder="e.g. 10001"></div>
+                        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                            <button type="button" class="btn btn-primary" style="flex: 1;">Continue <i data-lucide="arrow-right"></i></button>
+                            <button type="button" class="btn btn-secondary modal-close-btn" style="background: transparent; color: var(--text-primary); border: 1px solid var(--border-color);">Maybe Later</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/interactions.js"></script>
+    <script>
+        lucide.createIcons();
+        document.querySelectorAll('.modal-close-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('global-modal').classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+

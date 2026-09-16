@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thermova | Energy Efficiency Engineered</title>
+    <meta name="description" content="Discover how Thermova engineers better comfort through advanced insulation solutions.">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Home 2 Specific Styles */
+        
+        /* Section 1: Split Hero */
+        .hero-split {
+            display: flex;
+            min-height: 100vh;
+        }
+        .hero-split-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 5% 10%;
+            background-color: var(--bg-primary);
+        }
+        .hero-split-image {
+            flex: 1;
+            position: relative;
+            background: url('assets/images/home2-hero.png') center/cover no-repeat;
+        }
+        .hero-thermal-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(26,79,51,0.4) 0%, rgba(164,211,52,0.1) 100%);
+            mix-blend-mode: multiply;
+        }
+        
+        /* Section 2: Before / After */
+        .ba-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .ba-slider-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            user-select: none;
+        }
+        .ba-image {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        .ba-image-before {
+            z-index: 1;
+        }
+        .ba-image-after {
+            z-index: 2;
+            clip-path: inset(0 0 0 50%);
+        }
+        .ba-slider-handle {
+            position: absolute;
+            top: 0; left: 50%;
+            width: 4px; height: 100%;
+            background: white;
+            z-index: 3;
+            transform: translateX(-50%);
+            cursor: ew-resize;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .ba-slider-handle::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px; height: 40px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: var(--shadow-sm);
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>');
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .ba-labels {
+            position: absolute;
+            top: 1rem; width: 100%;
+            display: flex; justify-content: space-between;
+            padding: 0 2rem; z-index: 4;
+            pointer-events: none;
+        }
+        .ba-label {
+            background: rgba(0,0,0,0.6);
+            color: white; padding: 0.5rem 1rem;
+            border-radius: var(--border-radius-sm);
+            font-family: var(--font-heading); font-weight: 600;
+        }
+
+        /* Section 3: Advanced Accordion Layers */
+        .accordion-wrapper {
+            display: flex;
+            height: 500px;
+            gap: 1rem;
+            width: 100%;
+        }
+        .accordion-panel {
+            position: relative;
+            flex: 1;
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            cursor: pointer;
+            transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            background-size: cover;
+            background-position: center;
+        }
+        .accordion-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.1) 100%);
+            transition: background 0.6s ease;
+        }
+        .accordion-panel:hover {
+            flex: 2.5;
+        }
+        .accordion-panel:hover::before {
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 100%);
+        }
+        
+        .accordion-panel.highlight-layer::before {
+            background: linear-gradient(to top, rgba(26, 79, 51, 0.95) 0%, rgba(46, 139, 87, 0.3) 100%);
+        }
+        .accordion-panel.highlight-layer:hover::before {
+            background: linear-gradient(to top, rgba(26, 79, 51, 0.85) 0%, rgba(46, 139, 87, 0.5) 100%);
+        }
+
+        .accordion-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .accordion-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            flex-shrink: 0;
+        }
+        .highlight-layer .accordion-icon {
+            background: var(--clr-lime-accent);
+            color: var(--clr-deep-graphite);
+            border-color: var(--clr-lime-accent);
+        }
+        .accordion-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: var(--font-heading);
+            white-space: nowrap;
+        }
+        .accordion-desc {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.9);
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            min-width: 300px;
+        }
+        .accordion-panel:hover .accordion-desc {
+            opacity: 1;
+            max-height: 150px;
+            margin-top: 0.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .accordion-wrapper {
+                flex-direction: column;
+                height: 700px;
+            }
+            .accordion-desc {
+                min-width: 100%;
+                white-space: normal;
+            }
+        }
+
+        /* Section 4: Editorial Overlapping */
+        .editorial-section {
+            background-color: var(--bg-secondary);
+            overflow: hidden;
+        }
+        .editorial-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            position: relative;
+        }
+        .img-overlap-wrapper {
+            position: relative;
+            height: 600px;
+        }
+        .img-large {
+            position: absolute;
+            top: 0; right: 10%;
+            width: 70%; height: 80%;
+            object-fit: cover;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+        }
+        .img-small {
+            position: absolute;
+            bottom: 0; left: 10%;
+            width: 50%; height: 60%;
+            object-fit: cover;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 8px solid var(--bg-secondary);
+        }
+        .tech-label {
+            position: absolute;
+            background: var(--bg-card);
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius-sm);
+            box-shadow: var(--shadow-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex; gap: 0.5rem; align-items: center;
+            z-index: 10;
+        }
+
+        /* Section 5: Dashboard */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        .dash-card {
+            background: var(--bg-card);
+            padding: 1.5rem 1rem;
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--border-color);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .dash-card h4 {
+            font-size: 1.1rem;
+            white-space: nowrap;
+            margin: 0;
+        }
+        .dash-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 1rem 0;
+            white-space: nowrap;
+        }
+        .dash-bar-bg {
+            height: 8px; width: 100%;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .dash-bar-fill {
+            height: 100%; background: var(--clr-energy-green);
+            width: 0%; transition: width 1.5s ease-out;
+        }
+
+        /* Section 6: Final CTA */
+        .cta-premium {
+            background-color: var(--clr-deep-graphite);
+            color: white;
+            text-align: center;
+            padding: 8rem 0;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-split { flex-direction: column; }
+            .hero-split-image { min-height: 400px; }
+            .editorial-grid { grid-template-columns: 1fr; gap: 4rem; }
+            .img-overlap-wrapper { height: 400px; }
+            .dashboard-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .ba-slider-container { height: 300px; }
+            .ba-labels {
+                top: auto;
+                bottom: 1rem;
+                padding: 0 0.5rem;
+            }
+            .ba-label {
+                font-size: 0.75rem;
+                padding: 0.25rem 0.5rem;
+            }
+            .hero-split-text {
+                align-items: center;
+                text-align: center;
+                padding-top: 25%;
+            }
+        }
+    </style>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2384cc16' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="index.html" class="nav-brand">
+                <i data-lucide="shield-check" class="nav-logo-svg" style="color: var(--clr-energy-green)"></i>
+                <div class="brand-text-wrapper">
+                    <span class="brand-name">THERMOVA</span>
+                    <span class="brand-desc">Insulation & Energy</span>
+                </div>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="home-2.html" class="nav-link active">Home 2</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="energy-calculator.html" class="nav-link">Calculator</a>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </div>
+                                                <div class="nav-controls">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i data-lucide="moon"></i>
+                </button>
+                <button id="rtl-toggle" class="icon-btn" aria-label="Toggle RTL">
+                    <i data-lucide="arrow-left-right"></i>
+                </button>
+                <a href="#" class="btn btn-primary" data-modal-trigger="assessment">Free Assessment <i data-lucide="arrow-right"></i></a>
+            </div>
+            <button id="hamburger-menu" class="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+    <!-- Mobile Side Menu -->
+    <div id="side-menu" class="side-menu">
+        <div class="side-menu-header">
+            <a href="index.html" class="nav-brand">
+                <i data-lucide="shield-check" class="nav-logo-svg" style="color: var(--clr-energy-green)"></i>
+                <div class="brand-text-wrapper">
+                    <span class="brand-name">THERMOVA</span>
+                    <span class="brand-desc">Insulation & Energy</span>
+                </div>
+            </a>
+            <button id="side-menu-close" class="icon-btn" aria-label="Close Menu">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="home-2.html" class="nav-link active">Home 2</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="services.html" class="nav-link">Services</a>
+            <a href="energy-calculator.html" class="nav-link">Calculator</a>
+            <a href="pricing.html" class="nav-link">Pricing</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </div>
+        <div class="side-menu-controls">
+            <div class="side-menu-toggles">
+                <button id="theme-toggle-mobile" class="icon-btn" aria-label="Toggle Theme">
+                    <i data-lucide="moon"></i>
+                </button>
+                <button id="rtl-toggle-mobile" class="icon-btn" aria-label="Toggle RTL">
+                    <i data-lucide="arrow-left-right"></i>
+                </button>
+            </div>
+            <a href="#" class="btn btn-primary" data-modal-trigger="assessment" style="width: 100%;">Free Assessment <i data-lucide="arrow-right"></i></a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <!-- Section 01: Hero Split -->
+        <section class="hero-split">
+            <div class="hero-split-text reveal">
+                <span class="eyebrow">HIGH PERFORMANCE BUILDINGS</span>
+                <h1 style="font-size: clamp(3rem, 6vw, 5rem);">Energy Efficiency,<br>Engineered for Comfort.</h1>
+                <p style="font-size: 1.125rem; margin-top: 1rem; max-width: 500px;">Advanced thermal barriers and professional insulation installation for modern homes and commercial spaces.</p>
+                <div style="margin-top: 2rem;">
+                    <a href="#" class="btn btn-primary" data-modal-trigger="assessment">Start Your Assessment <i data-lucide="arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="hero-split-image reveal card-3d">
+                <div class="hero-thermal-overlay"></div>
+            </div>
+        </section>
+
+        <!-- Section 02: Before vs After -->
+        <section class="section-padding container">
+            <div style="text-align: center; margin-bottom: 4rem;" class="reveal">
+                <span class="eyebrow">THERMAL PERFORMANCE</span>
+                <h2>The Difference is Measurable</h2>
+                <p>Drag the slider to see how proper insulation prevents heat loss and drafts.</p>
+            </div>
+
+            <div class="ba-container reveal">
+                <div class="ba-slider-container card-3d">
+                    <img src="assets/images/before.png" class="ba-image ba-image-before" alt="Poor insulation">
+                    <img src="assets/images/after.png" class="ba-image ba-image-after" alt="Good insulation">
+                    
+                    <div class="ba-labels">
+                        <div class="ba-label">Before: Heat Loss</div>
+                        <div class="ba-label">After: Protected</div>
+                    </div>
+                    
+                    <div class="ba-slider-handle"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 03: 3D Cross Section -->
+        <section class="section-padding container">
+            <div style="text-align: center; margin-bottom: 4rem;" class="reveal">
+                <span class="eyebrow">BUILDING ENVELOPE</span>
+                <h2>The Insulation Layer</h2>
+                <p>Hover to explore the critical components of a high-performance wall system.</p>
+            </div>
+            
+            <div class="accordion-wrapper reveal">
+                <div class="accordion-panel" style="background-image: url('assets/images/Exterior Shield.png');">
+                    <div class="accordion-content">
+                        <div class="accordion-icon"><i data-lucide="sun"></i></div>
+                        <div class="accordion-title">Exterior Shield</div>
+                        <div class="accordion-desc">The first line of defense against weather, designed to shed bulk water and protect the inner layers from extreme temperatures.</div>
+                    </div>
+                </div>
+                <div class="accordion-panel highlight-layer" style="background-image: url('assets/images/Thermal Barrier.png'); border: 2px solid var(--clr-lime-accent);">
+                    <div class="accordion-content">
+                        <div class="accordion-icon"><i data-lucide="shield-check"></i></div>
+                        <div class="accordion-title" style="color: var(--clr-lime-accent);">Thermal Barrier</div>
+                        <div class="accordion-desc">High-density insulation locking in conditioned air, eliminating thermal bridging, and significantly reducing energy costs.</div>
+                    </div>
+                </div>
+                <div class="accordion-panel" style="background-image: url('assets/images/Interior Comfort.png');">
+                    <div class="accordion-content">
+                        <div class="accordion-icon"><i data-lucide="home"></i></div>
+                        <div class="accordion-title">Interior Comfort</div>
+                        <div class="accordion-desc">Quiet, temperature-stable living space with an airtight seal that keeps moisture out while maintaining peak indoor comfort.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 04: Editorial Section -->
+        <section class="section-padding editorial-section">
+            <div class="container editorial-grid">
+                <div class="img-overlap-wrapper reveal">
+                    <img src="assets/images/Attic Heat Loss.png" class="img-large" alt="Attic structure">
+                    <img src="assets/images/Wall Drafts.png" class="img-small" alt="Wall cavity">
+                    
+                    <div class="tech-label" style="top: 10%; right: 5%;"><i data-lucide="arrow-up-circle"></i> Attic Heat Loss</div>
+                    <div class="tech-label" style="bottom: 10%; left: 5%;"><i data-lucide="wind"></i> Wall Drafts</div>
+                </div>
+                
+                <div class="reveal" style="padding: 0 5%;">
+                    <span class="eyebrow">HIDDEN INEFFICIENCIES</span>
+                    <h2>Comfort Starts Where You Can't See It.</h2>
+                    <p>The majority of energy loss occurs in attics, wall cavities, and crawlspaces. By targeting these hard-to-reach areas with premium insulation, we dramatically reduce HVAC workload and improve consistent comfort.</p>
+                    <ul style="margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem;">
+                        <li style="display: flex; gap: 1rem;"><i data-lucide="check-circle" style="color: var(--clr-energy-green);"></i> Stop heated air from escaping through the roof</li>
+                        <li style="display: flex; gap: 1rem;"><i data-lucide="check-circle" style="color: var(--clr-energy-green);"></i> Prevent outdoor temperatures from penetrating walls</li>
+                        <li style="display: flex; gap: 1rem;"><i data-lucide="check-circle" style="color: var(--clr-energy-green);"></i> Seal hidden gaps and cracks creating drafts</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 05: Dashboard -->
+        <section class="section-padding container">
+            <div style="text-align: center;" class="reveal">
+                <span class="eyebrow">PERFORMANCE METRICS</span>
+                <h2>Before vs. After Insulation</h2>
+                <p>Illustrative examples of how a professional insulation upgrade can improve your building's metrics.</p>
+            </div>
+            
+            <div class="dashboard-grid reveal">
+                <div class="dash-card">
+                    <h4>Heat Loss</h4>
+                    <div class="dash-value">-40%</div>
+                    <div class="dash-bar-bg"><div class="dash-bar-fill" style="width: 60%; background: var(--clr-text-gray);"></div></div>
+                    <p style="font-size: 0.75rem; margin-top: 0.5rem; margin-bottom: 0;">After improvement</p>
+                </div>
+                <div class="dash-card">
+                    <h4>Indoor Comfort</h4>
+                    <div class="dash-value" style="color: var(--clr-energy-green);">+85%</div>
+                    <div class="dash-bar-bg"><div class="dash-bar-fill" style="width: 85%;"></div></div>
+                    <p style="font-size: 0.75rem; margin-top: 0.5rem; margin-bottom: 0;">Temperature consistency</p>
+                </div>
+                <div class="dash-card">
+                    <h4>HVAC Workload</h4>
+                    <div class="dash-value">-30%</div>
+                    <div class="dash-bar-bg"><div class="dash-bar-fill" style="width: 70%; background: var(--clr-text-gray);"></div></div>
+                    <p style="font-size: 0.75rem; margin-top: 0.5rem; margin-bottom: 0;">Less runtime required</p>
+                </div>
+                <div class="dash-card">
+                    <h4>Energy Efficiency</h4>
+                    <div class="dash-value" style="color: var(--clr-energy-green);">Optimal</div>
+                    <div class="dash-bar-bg"><div class="dash-bar-fill" style="width: 95%;"></div></div>
+                    <p style="font-size: 0.75rem; margin-top: 0.5rem; margin-bottom: 0;">Based on R-value goals</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 06: Final CTA Premium -->
+        <section class="cta-premium">
+            <div class="container reveal">
+                <h2 style="color: white;">Stop Paying for Energy That Escapes.</h2>
+                <p style="color: rgba(255,255,255,0.8); max-width: 600px; margin: 0 auto 2rem;">Discover where your building may be losing energy and explore practical insulation improvements.</p>
+                <a href="#" class="btn btn-primary" data-modal-trigger="assessment">Get Free Assessment</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="nav-brand" style="margin-bottom: 1rem;">
+                        <i data-lucide="shield-check" class="nav-logo-svg" style="color: var(--clr-energy-green)"></i>
+                <div class="brand-text-wrapper">
+                    <span class="brand-name">THERMOVA</span>
+                    <span class="brand-desc">Insulation & Energy</span>
+                </div>
+                    </div>
+                    <p>Professional residential and commercial insulation installation focused on improving building comfort and lowering utility bills.</p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Instagram">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        </a>
+                        <a href="#" aria-label="Facebook">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                        </a>
+                        <a href="#" aria-label="X">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="YouTube">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Explore</h4>
+                    <div class="footer-links">
+                        <a href="index.html">Home</a>
+                        <a href="about.html">About</a>
+                        <a href="services.html">Services</a>
+                        <a href="energy-calculator.html">Energy Calculator</a>
+                        <a href="pricing.html">Pricing</a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <div class="footer-links">
+                        <a href="contact.html">Contact Us</a>
+                        <a href="#" data-modal-trigger="assessment">Free Assessment</a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Get Practical Energy-Saving Tips</h4>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Enter your email" required>
+                        <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.5rem;">Subscribe <i data-lucide="arrow-right"></i></button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div>&copy; 2026 THERMOVA. All rights reserved.</div>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Modals -->
+    <div id="global-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close"><i data-lucide="x"></i></button>
+            <div id="modal-dynamic-content">
+                <!-- Assessment Template -->
+                <div id="modal-assessment" class="modal-template active">
+                    <h3 style="margin-bottom: 0.5rem;">Let's Improve Your Energy Efficiency</h3>
+                    <p style="margin-bottom: 2rem;">Tell us a little about your building and we'll help you identify the right next step.</p>
+                    <form>
+                        <div class="form-group"><label>Full Name</label><input type="text" placeholder="John Doe"></div>
+                        <div class="form-group"><label>Email Address</label><input type="email" placeholder="john@example.com"></div>
+                        <div class="form-group"><label>Property Type</label><select><option>Single Family Home</option><option>Commercial Building</option></select></div>
+                        <div class="form-group"><label>ZIP / Postal Code</label><input type="text" placeholder="e.g. 10001"></div>
+                        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                            <button type="button" class="btn btn-primary" style="flex: 1;">Continue <i data-lucide="arrow-right"></i></button>
+                            <button type="button" class="btn btn-secondary modal-close-btn" style="background: transparent; color: var(--text-primary); border: 1px solid var(--border-color);">Maybe Later</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/interactions.js"></script>
+    <script>
+        lucide.createIcons();
+        document.querySelectorAll('.modal-close-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('global-modal').classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+        
+        // Trigger dashboard bars animation when visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    const bars = entry.target.querySelectorAll('.dash-bar-fill');
+                    bars.forEach(bar => {
+                        bar.style.width = bar.getAttribute('style').match(/width:\s*(\d+)%/)[1] + '%';
+                    });
+                }
+            });
+        });
+        const dashGrid = document.querySelector('.dashboard-grid');
+        if(dashGrid) observer.observe(dashGrid);
+    </script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services | Thermova Insulation</title>
+    <meta name="description" content="Explore our professional insulation solutions including attic, wall, spray foam, and air sealing.">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Services Specific Styles */
+        .hero-services {
+            padding-top: 150px;
+            padding-bottom: 80px;
+            background-color: var(--bg-secondary);
+            text-align: center;
+            min-height: 450px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Large Interactive Service Navigation */
+        .service-nav-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+        }
+        
+        .service-block {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            padding: 2rem 0;
+        }
+        
+        /* Zig-zag layout for even items */
+        .service-block:nth-child(even) .service-content {
+            order: 2;
+        }
+        .service-block:nth-child(even) .service-image-wrapper {
+            order: 1;
+        }
+
+        .service-image-wrapper {
+            position: relative;
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            height: 350px;
+            box-shadow: var(--shadow-md);
+        }
+        .service-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition-slow);
+        }
+        .service-block:hover .service-image-wrapper img {
+            transform: scale(1.05);
+        }
+        .service-benefits {
+            margin: 1.5rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .benefit-tag {
+            background: var(--bg-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Stylized House Diagram */
+        .house-diagram-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            padding-top: 2rem;
+        }
+        .house-svg-wrapper {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1));
+        }
+        .hotspot {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: var(--clr-lime-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 0 4px rgba(164, 211, 52, 0.3);
+            animation: pulse 2s infinite;
+            z-index: 10;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(164, 211, 52, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(164, 211, 52, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(164, 211, 52, 0); }
+        }
+        .hotspot::after {
+            content: '+';
+            color: var(--clr-deep-graphite);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .hotspot-info {
+            position: absolute;
+            width: 250px;
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-fast);
+            z-index: 11;
+            transform: translateY(10px);
+            pointer-events: none;
+            text-align: left;
+        }
+        [dir="rtl"] .hotspot-info { text-align: right; }
+        
+        .hotspot:hover .hotspot-info {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Hotspot Positions (Percentages based on standard house shape) */
+        .hs-attic { top: 20%; left: 50%; }
+        .hs-wall { top: 55%; left: 20%; }
+        .hs-window { top: 50%; right: 30%; }
+        .hs-crawl { bottom: 10%; left: 50%; }
+        
+        /* CTA Card */
+        .cta-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: 5rem 2rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .cta-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 6px;
+            background: linear-gradient(90deg, var(--clr-energy-green), var(--clr-lime-accent));
+        }
+
+        @media (max-width: 1024px) {
+            .service-block, .service-block:nth-child(even) {
+                grid-template-columns: 1fr;
+            }
+            .service-block:nth-child(even) .service-content { order: 1; }
+            .service-block:nth-child(even) .service-image-wrapper { order: 2; }
+        }
+        @media (max-width: 768px) {
+            .service-content {
+                text-align: center;
+            }
+            .service-benefits {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2384cc16' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="index.html" class="nav-brand">
+                <i data-lucide="shield-check" class="nav-logo-svg" style="color: var(--clr-energy-green)"></i>
+                <div class="brand-text-wrapper">
+                    <span class="brand-name">THERMOVA</span>
+                    <span class="brand-desc">Insulation & Energy</span>
+                </div>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="home-2.html" class="nav-link">Home 2</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="services.html" class="nav-link active">Services</a>
+                <a href="energy-calculator.html" class="nav-link">Calculator</a>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </div>
+                                                <div class="nav-controls">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i data-lucide="moon"></i>
+                </button>
+                <button id="rtl-toggle" class="icon-btn" aria-label="Toggle RTL">
+                    <i data-lucide="arrow-left-right"></i>
+                </button>
+                <a href="#" class="btn btn-primary" data-modal-trigger="assessment">Free Assessment <i data-lucide="arrow-right"></i></a>
+            </div>
+            <button id="hamburger-menu" class="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+    <!-- Mobile Side Menu -->
+    <div id="side-menu" class="side-menu">
+        <div class="side-menu-header">
+            <a href="index.html" class="nav-brand">
+                <i data-lucide="shield-check" class="nav-logo-svg" style="color: var(--clr-energy-green)"></i>
+                <div class="brand-text-wrapper">
+                    <span class="brand-name">THERMOVA</span>
+                    <span class="brand-desc">Insulation & Energy</span>
+                </div>
+            </a>
+            <button id="side-menu-close" class="icon-btn" aria-label="Close Menu">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="home-2.html" class="nav-link">Home 2</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="services.html" class="nav-link active">Services</a>
+            <a href="energy-calculator.html" class="nav-link">Calculator</a>
+            <a href="pricing.html" class="nav-link">Pricing</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </div>
+        <div class="side-menu-controls">
+            <div class="side-menu-toggles">
+                <button id="theme-toggle-mobile" class="icon-btn" aria-label="Toggle Theme">
+                    <i data-lucide="moon"></i>
+                </button>
+                <button id="rtl-toggle-mobile" class="icon-btn" aria-label="Toggle RTL">
+                    <i data-lucide="arrow-left-right"></i>
+                </button>
+            </div>
+            <a href="#" class="btn btn-primary" data-modal-trigger="assessment" style="width: 100%;">Free Assessment <i data-lucide="arrow-right"></i></a>
+        </div>
+    </div>
+
+    <main>
+        <!-- Section 01: Hero -->
+        <section class="hero-services">
+            <div class="container reveal">
+                <span class="eyebrow">PROFESSIONAL SERVICES</span>
+                <h1 style="max-width: 800px; margin: 0 auto;">Insulation Solutions for Every Critical Layer.</h1>
+                <p style="max-width: 600px; margin: 1.5rem auto 0; font-size: 1.125rem;">From attic floors to wall cavities and air-sealing applications, we help improve thermal performance where it matters most.</p>
+            </div>
+        </section>
+
+        <!-- Section 02: Service Explorer -->
+        <section class="section-padding container">
+            <div class="service-nav-grid">
+                
+                <!-- Service 1 -->
+                <div class="service-block reveal">
+                    <div class="service-content">
+                        <h2>Attic Insulation</h2>
+                        <p>Heat naturally rises, making the attic the primary escape route for your heating in winter and the entry point for radiant heat in summer. Proper attic insulation creates a thermal barrier that dramatically improves whole-house comfort.</p>
+                        <div class="service-benefits">
+                            <div class="benefit-tag"><i data-lucide="check" style="color:var(--clr-energy-green)"></i> High ROI</div>
+                            <div class="benefit-tag"><i data-lucide="check" style="color:var(--clr-energy-green)"></i> Fast Installation</div>
+                        </div>
+                        <p style="font-size: 0.875rem; color: var(--text-secondary);"><strong>Suitable for:</strong> Unfinished attics, accessible roof spaces.</p>
+                        <a href="#" class="btn btn-secondary" style="margin-top: 1rem;" data-modal-trigger="quote">Request Quote</a>
+                    </div>
+                    <div class="service-image-wrapper">
+                        <img src="assets/images/Attic Insulation.png" alt="Attic Insulation">
+                    </div>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="service-block reveal">
+                    <div class="service-content">
+                        <h2>Wall Insulation</h2>
+                        <p>Empty wall cavities act like thermal bridges, letting outdoor temperatures dictate your indoor comfort. We use specialized injection techniques to fill existing walls without removing drywall, instantly improving the building's thermal envelope.</p>
+                        <div class="service-benefits">
+                            <div class="benefit-tag"><i data-lucide="check" style="color:var(--clr-energy-green)"></i> Draft Reduction</div>
+                            <div class="benefit-tag"><i data-lucide="check" style="color:var(--clr-energy-green)"></i> Sound Dampening</div>
+                        </div>
+                        <p style="font-size: 0.875rem; color: var(--text-secondary);"><strong>Suitable for:</strong> Older homes, uninsulated exterior walls.</p>
+                        <a href="#" class="btn btn-secondary" style="margin-top: 1rem;" data-modal-trigger="quote">Request Quote</a>
+                    </div>
+                    <div class="service-image-wrapper">
+                        <img src="assets/images/Wall Insulation.png" alt="Wall Insulation">
+                    </div>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="service-block reveal">
+                    <div class="service-content">
+                        <h2>Spray Foam Insulation</h2>
+                        <p>The ultimate two-in-one solution. Spray foam expands to fill every crack and crevice, providing both superior thermal resistance and a complete air barrier. It's the highest performing insulation available for complex structures.</p>
+                        <div class="service-benefits">
+                            <div class="benefit-tag"><i data-lucide="check" style="color:var(--clr-energy-green)"></i> Air & Moisture Barrier</div>
+                            <div class="benefit-tag"><i data-lucide="check" style="color:var(--clr-energy-green)"></i> Highest R-Value</div>
+                        </div>
+                        <p style="font-size: 0.875rem; color: var(--text-secondary);"><strong>Suitable for:</strong> New construction, open cavities, crawlspaces.</p>
+                        <a href="#" class="btn btn-secondary" style="margin-top: 1rem;" data-modal-trigger="quote">Request Quote</a>
+                    </div>
+                    <div class="service-image-wrapper">
+                        <img src="assets/images/Spray Foam Insulation.png" alt="Spray Foam">
+                    </div>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="service-block reveal">
+                    <div class="service-content">
+                        <h2>Air Sealing</h2>
+                        <p>Insulation alone isn't enough if air is flowing freely through gaps around pipes, fixtures, and structural joints. Air sealing closes these leaks, ensuring your insulation can perform at its maximum rated efficiency.</p>
+                        <a href="#" class="btn btn-secondary" style="margin-top: 1rem;" data-modal-trigger="quote">Request Quote</a>
+                    </div>
+                    <div class="service-image-wrapper">
+                        <img src="assets/images/Air Sealing.png" alt="Air Sealing">
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- Section 03: Where Energy Escapes (Stylized Diagram) -->
+        <section class="section-padding container" style="background: var(--bg-secondary); border-radius: var(--border-radius-lg);">
+            <div style="text-align: center; margin-bottom: 3rem;" class="reveal">
+                <span class="eyebrow">BUILDING DIAGNOSTICS</span>
+                <h2>Where Energy Escapes</h2>
+                <p>Hover over the markers to see common thermal failure points.</p>
+            </div>
+            
+            <div class="house-diagram-container reveal">
+                <!-- AI Generated House Diagram -->
+                <img src="assets/images/house_thermal_diagram.jpg" alt="House Thermal Diagram" class="house-svg-wrapper" style="border-radius: var(--border-radius-lg);">
+                
+                <div class="hotspot hs-attic">
+                    <div class="hotspot-info">
+                        <h4 style="color: var(--clr-energy-green); margin-bottom: 0.5rem;">The Attic</h4>
+                        <p style="font-size: 0.875rem; margin: 0;"><strong>Issue:</strong> Up to 25% of heat loss occurs here as warm air rises.<br><strong>Solution:</strong> Blown-in fiberglass or cellulose insulation.</p>
+                    </div>
+                </div>
+                
+                <div class="hotspot hs-wall">
+                    <div class="hotspot-info">
+                        <h4 style="color: var(--clr-energy-green); margin-bottom: 0.5rem;">Exterior Walls</h4>
+                        <p style="font-size: 0.875rem; margin: 0;"><strong>Issue:</strong> Uninsulated cavities allow direct thermal transfer.<br><strong>Solution:</strong> Dense-pack injection insulation.</p>
+                    </div>
+                </div>
+                
+                <div class="hotspot hs-window">
+                    <div class="hotspot-info">
+                        <h4 style="color: var(--clr-energy-green); margin-bottom: 0.5rem;">Windows & Doors</h4>
+                        <p style="font-size: 0.875rem; margin: 0;"><strong>Issue:</strong> Gaps around frames cause significant drafts.<br><strong>Solution:</strong> Targeted air sealing and weatherstripping.</p>
+                    </div>
+                </div>
+                
+                <div class="hotspot hs-crawl">
+                    <div class="hotspot-info">
+                        <h4 style="color: var(--clr-energy-green); margin-bottom: 0.5rem;">Crawlspace / Floor</h4>
+                        <p style="font-size: 0.875rem; margin: 0;"><strong>Issue:</strong> Cold air infiltration from below creates cold floors.<br><strong>Solution:</strong> Spray foam encapsulation.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 04: CTA -->
+        <section class="section-padding container">
+            <div style="text-align: center;" class="cta-card reveal">
+                <h2>Not Sure Which Insulation You Need?</h2>
+                <p style="max-width: 600px; margin: 1rem auto 2rem;">Start with a free assessment. We use thermal imaging and visual inspection to identify practical improvement opportunities for your specific building.</p>
+                <a href="#" class="btn btn-primary" data-modal-trigger="assessment">Book Free Assessment <i data-lucide="arrow-right"></i></a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="nav-brand" style="margin-bottom: 1rem;">
+                        <i data-lucide="shield-check" class="nav-logo-svg" style="color: var(--clr-energy-green)"></i>
+                <div class="brand-text-wrapper">
+                    <span class="brand-name">THERMOVA</span>
+                    <span class="brand-desc">Insulation & Energy</span>
+                </div>
+                    </div>
+                    <p>Professional residential and commercial insulation installation focused on improving building comfort and lowering utility bills.</p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Instagram">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        </a>
+                        <a href="#" aria-label="Facebook">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                        </a>
+                        <a href="#" aria-label="X">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="YouTube">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Explore</h4>
+                    <div class="footer-links">
+                        <a href="index.html">Home</a>
+                        <a href="about.html">About</a>
+                        <a href="services.html">Services</a>
+                        <a href="energy-calculator.html">Energy Calculator</a>
+                        <a href="pricing.html">Pricing</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <div class="footer-links">
+                        <a href="contact.html">Contact Us</a>
+                        <a href="#" data-modal-trigger="assessment">Free Assessment</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Get Practical Energy-Saving Tips</h4>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Enter your email" required>
+                        <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.5rem;">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 THERMOVA. All rights reserved.</div>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Modals -->
+    <div id="global-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close"><i data-lucide="x"></i></button>
+            <div id="modal-dynamic-content">
+                <!-- Assessment Template -->
+                <div id="modal-assessment" class="modal-template active">
+                    <h3 style="margin-bottom: 0.5rem;">Let's Improve Your Energy Efficiency</h3>
+                    <p style="margin-bottom: 2rem;">Tell us a little about your building and we'll help you identify the right next step.</p>
+                    <form>
+                        <div class="form-group"><label>Full Name</label><input type="text" placeholder="John Doe"></div>
+                        <div class="form-group"><label>Email Address</label><input type="email" placeholder="john@example.com"></div>
+                        <div class="form-group"><label>Property Type</label><select><option>Single Family Home</option><option>Commercial Building</option></select></div>
+                        <div class="form-group"><label>ZIP / Postal Code</label><input type="text" placeholder="e.g. 10001"></div>
+                        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                            <button type="button" class="btn btn-primary" style="flex: 1;">Continue <i data-lucide="arrow-right"></i></button>
+                            <button type="button" class="btn btn-secondary modal-close-btn" style="background: transparent; color: var(--text-primary); border: 1px solid var(--border-color);">Maybe Later</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- Quote Template -->
+                <div id="modal-quote" class="modal-template">
+                    <h3 style="margin-bottom: 0.5rem;">Get a Project Estimate</h3>
+                    <p style="margin-bottom: 2rem;">Provide some basic details about your project to get started.</p>
+                    <form>
+                        <div class="form-group"><label>Property Type</label><select><option>Residential</option><option>Commercial</option></select></div>
+                        <div class="form-group"><label>Approximate Size (Sq Ft)</label><input type="number" placeholder="2000"></div>
+                        <div class="form-group"><label>Service Needed</label>
+                            <select>
+                                <option>Attic Insulation</option>
+                                <option>Wall Insulation</option>
+                                <option>Spray Foam</option>
+                                <option>Not Sure / Full Assessment</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Request Estimate <i data-lucide="arrow-right"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/interactions.js"></script>
+    <script>
+        lucide.createIcons();
+        document.querySelectorAll('.modal-close-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('global-modal').classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+

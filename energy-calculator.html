@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Savings Calculator | Thermova</title>
+    <meta name="description" content="Calculate your potential energy savings with a professional insulation upgrade from Thermova.">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Calculator Specific Styles */
+        .hero-calc {
+            padding-top: 150px;
+            padding-bottom: 80px;
+            background-color: var(--bg-secondary);
+            text-align: center;
+            min-height: 450px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .calc-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 4rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .calc-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .calc-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .calc-input-group label {
+            font-family: var(--font-heading);
+            font-weight: 600;
+        }
+
+        .calc-input-group select, .calc-input-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius-md);
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        .calc-input-group select:focus, .calc-input-group input:focus {
+            outline: none;
+            border-color: var(--clr-lime-accent);
+        }
+
+        /* Results Dashboard */
+        .calc-results-dashboard {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all var(--transition-base);
+            background: var(--clr-forest-green);
+            color: white;
+            padding: 4rem;
+            border-radius: var(--border-radius-lg);
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .result-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: var(--border-radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .result-val {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--clr-lime-accent);
+            line-height: 1;
+            margin: 1rem 0;
+        }
+
+        .disclaimer {
+            font-size: 0.875rem;
+            color: rgba(255,255,255,0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Final CTA */
+        .cta-standard {
+            background-color: var(--bg-secondary);
+            text-align: center;
+            padding: 8rem 0;
+            border-radius: var(--border-radius-lg);
+            margin-bottom: 4rem;
+        }
+        /* Bento Grid Layout */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: minmax(200px, auto);
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .bento-card {
+            background: var(--bg-card);
+            border-radius: var(--border-radius-lg);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            position: relative;
+        }
+        .bento-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        .bento-card-large {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+        .bento-card-wide {
+            grid-column: span 2;
+            grid-row: span 1;
+        }
+        .bento-card-small {
+            grid-column: span 1;
+            grid-row: span 1;
+        }
+        /* Resource Grid */
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .resource-card {
+            background: var(--bg-card);
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-base);
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+        [dir="rtl"] .resource-card { text-align: right; }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--clr-lime-accent);
+        }
+
+        .resource-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .resource-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .resource-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--clr-energy-green);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        @media (max-width: 1024px) {
+            .resource-grid { grid-template-columns: 1fr 1fr; }
+            
+            /* 4 cards in 2x2 */
+            .bento-grid { grid-template-columns: repeat(2, 1fr); }
+            .bento-card-large, .bento-card-wide { grid-column: span 2; }
+            
+            /* 3 cards with 3rd centered */
+            .results-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .results-grid > *:last-child:nth-child(odd) {
+                grid-column: 1 / -1;
+                width: calc(50% - 1rem); /* Account for 2rem gap */
+                margin-inline: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .calc-form-grid, .results-grid { grid-template-columns: 1fr; }
+            .calc-wrapper, .calc-results-dashboard { padding: 1.5rem; }
+            .bento-grid, .resource-grid { grid-template-columns: 1fr; }
+            .bento-card { grid-column: span 1 !important; grid-row: span 1 !important; }
+            #full-calc-btn { 
+                white-space: nowrap; 
+                width: 100% !important; 
+                padding-left: 1rem !important; 
+                padding-right: 1rem !important;
+            }
+            .cta-standard h2 {
+                text-align: center !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+                width: 100%;
+                padding: 0 1rem;
+            }
+            .cta-standard {
+                padding: 4rem 0;
+            }
+        }
+    </style>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2384cc16' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="index.html" class="nav-brand">
+                <i data-lucide="shield-check" class="nav-logo-svg" style="color: var(--clr-energy-green)"></i>
+                <div class="brand-text-wrapper">
+                    <span class="brand-name">THERMOVA</span>
+                    <span class="brand-desc">Insulation & Energy</span>
+                </div>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="home-2.html" class="nav-link">Home 2</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="energy-calculator.html" class="nav-link active">Calculator</a>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </div>
+                                                <div class="nav-controls">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i data-lucide="moon"></i>
+                </button>
+                <button id="rtl-toggle" class="icon-btn" aria-label="Toggle RTL">
+                    <i data-lucide="arrow-left-right"></i>
+                </button>
+                <a href="#" class="btn btn-primary" data-modal-trigger="assessment">Free Assessment <i data-lucide="arrow-right"></i></a>
+            </div>
+            <button id="hamburger-menu" class="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>    <!-- Mobile Side Menu -->
+    <div id="side-menu" class="side-menu">
+        <div class="side-menu-header">
+            <a href="index.html" class="nav-brand">
+                <i data-lucide="shield-check" class="nav-logo-svg" style="color: var(--clr-energy-green)"></i>
+                <div class="brand-text-wrapper">
+                    <span class="brand-name">THERMOVA</span>
+                    <span class="brand-desc">Insulation & Energy</span>
+                </div>
+            </a>
+            <button id="side-menu-close" class="icon-btn" aria-label="Close Menu">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="home-2.html" class="nav-link">Home 2</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="services.html" class="nav-link">Services</a>
+            <a href="energy-calculator.html" class="nav-link active">Calculator</a>
+            <a href="pricing.html" class="nav-link">Pricing</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </div>
+        <div class="side-menu-controls">
+            <div class="side-menu-toggles">
+                <button id="theme-toggle-mobile" class="icon-btn" aria-label="Toggle Theme">
+                    <i data-lucide="moon"></i>
+                </button>
+                <button id="rtl-toggle-mobile" class="icon-btn" aria-label="Toggle RTL">
+                    <i data-lucide="arrow-left-right"></i>
+                </button>
+            </div>
+            <a href="#" class="btn btn-primary" data-modal-trigger="assessment" style="width: 100%;">Free Assessment <i data-lucide="arrow-right"></i></a>
+        </div>
+    </div>
+
+    <main>
+        <!-- Section 01: Hero -->
+        <section class="hero-calc">
+            <div class="container reveal">
+                <span class="eyebrow">SAVINGS CALCULATOR</span>
+                <h1 style="max-width: 800px; margin: 0 auto;">Estimate Your Potential Energy Savings.</h1>
+                <p style="max-width: 600px; margin: 1.5rem auto 0; font-size: 1.125rem;">Use this interactive calculator to explore how insulation improvements could affect your estimated energy costs.<br><br><em>Note: Results are illustrative estimates and are not a guarantee of actual savings.</em></p>
+            </div>
+        </section>
+
+        <!-- Section 02: Calculator Form -->
+        <section class="section-padding container">
+            <div class="calc-wrapper reveal">
+                <div class="calc-form-grid">
+                    
+                    <div class="calc-input-group">
+                        <label>Property Type</label>
+                        <select id="full-calc-type">
+                            <option>Single Family</option>
+                            <option>Apartment</option>
+                            <option>Commercial</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="calc-input-group">
+                        <label>Approximate Property Size (Sq Ft)</label>
+                        <input type="number" id="full-calc-size" value="2000" min="100">
+                    </div>
+
+                    <div class="calc-input-group">
+                        <label>Current Monthly Energy Bill ($)</label>
+                        <input type="number" id="full-calc-bill" value="150" min="10">
+                    </div>
+
+                    <div class="calc-input-group">
+                        <label>Current Insulation Condition</label>
+                        <select id="full-calc-insulation">
+                            <option value="poor">Poor (Drafty, very cold/hot)</option>
+                            <option value="average" selected>Average (Some drafts, inconsistent)</option>
+                            <option value="good">Good (Comfortable, but want improvement)</option>
+                            <option value="unknown">Unknown</option>
+                        </select>
+                    </div>
+
+                    <div class="calc-input-group" style="grid-column: 1 / -1;">
+                        <label>Primary Goal</label>
+                        <select id="full-calc-goal">
+                            <option>Lower Bills</option>
+                            <option>Better Comfort</option>
+                            <option>Reduce Drafts</option>
+                            <option>Improve Efficiency</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="text-align: center;">
+                    <button id="full-calc-btn" class="btn btn-primary" style="padding: 1.5rem 3rem; font-size: 1.125rem;">Calculate Estimate <i data-lucide="calculator"></i></button>
+                </div>
+            </div>
+
+            <!-- Section 03: Results Dashboard -->
+            <div id="calculator-results-dashboard" class="calc-results-dashboard">
+                <span class="eyebrow" style="color: var(--clr-lime-accent);">YOUR ESTIMATED SAVINGS</span>
+                <h2 style="color: white; margin-top: 1rem;">The Impact of Better Insulation</h2>
+                
+                <div class="results-grid">
+                    <div class="result-item">
+                        <div style="font-weight: 600;">Monthly Savings</div>
+                        <div class="result-val">$<span id="res-monthly">0</span></div>
+                        <div style="font-size: 0.875rem;">Estimated reduction</div>
+                    </div>
+                    <div class="result-item">
+                        <div style="font-weight: 600;">Annual Savings</div>
+                        <div class="result-val">$<span id="res-annual">0</span></div>
+                        <div style="font-size: 0.875rem;">Estimated reduction</div>
+                    </div>
+                    <div class="result-item">
+                        <div style="font-weight: 600;">Efficiency Improvement</div>
+                        <div class="result-val"><span id="res-efficiency">0</span></div>
+                        <div style="font-size: 0.875rem;">Potential thermal retention</div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <a href="#" class="btn btn-primary" data-modal-trigger="assessment">Request Professional Assessment <i data-lucide="arrow-right"></i></a>
+                </div>
+
+                <p class="disclaimer">These figures are illustrative estimates based on simplified assumptions. Actual savings vary depending on climate, building envelope, HVAC system, occupancy, utility rates, existing insulation, and installation quality.</p>
+            </div>
+        </section>
+
+        <!-- Section 04: Related Information (Bento Box) -->
+        <section class="section-padding container">
+            <div style="text-align: center; margin-bottom: 3rem;" class="reveal">
+                <span class="eyebrow">UNDERSTANDING INSULATION</span>
+                <h2>The Science of Savings</h2>
+                <p style="max-width: 600px; margin: 1rem auto 0; font-size: 1.1rem; color: var(--text-secondary);">Key concepts to help you understand how your building uses and loses energy.</p>
+            </div>
+
+            <div class="bento-grid reveal">
+                <!-- Large Card -->
+                <div class="bento-card bento-card-large" style="background: linear-gradient(135deg, var(--clr-deep-graphite) 0%, #1a2a22 100%); color: white; border-color: rgba(255,255,255,0.1);">
+                    <div>
+                        <i data-lucide="thermometer" style="width: 48px; height: 48px; color: var(--clr-lime-accent); margin-bottom: 1.5rem;"></i>
+                        <h3 style="color: white; font-size: 2rem; margin-bottom: 1rem;">The Power of R-Value</h3>
+                        <p style="color: rgba(255,255,255,0.8); font-size: 1.1rem; line-height: 1.6;">R-Value measures how well an insulation material resists the conductive flow of heat. The higher the R-Value, the greater the insulating power.</p>
+                        <p style="color: rgba(255,255,255,0.8); font-size: 1.1rem; line-height: 1.6; margin-top: 1.5rem;">Depending on your local climate zone, upgrading your attic from R-19 to R-60 can dramatically shift your building's energy profile, turning a drafty structure into a thermal fortress.</p>
+                    </div>
+                </div>
+
+                <!-- Wide Card -->
+                <div class="bento-card bento-card-wide">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                            <h3>Return on Investment</h3>
+                            <i data-lucide="trending-down" style="color: var(--clr-energy-green);"></i>
+                        </div>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6;">Insulation is one of the few home improvements that actually pays for itself. Most professional installations achieve full ROI within 3 to 5 years through reduced utility bills.</p>
+                    </div>
+                    <div style="font-size: 2.5rem; font-weight: 800; font-family: var(--font-heading); color: var(--clr-energy-green);">
+                        Avg. 15% Savings
+                    </div>
+                </div>
+
+                <!-- Small Card 1 -->
+                <div class="bento-card bento-card-small">
+                    <div>
+                        <i data-lucide="wind" style="margin-bottom: 1rem; color: var(--text-primary);"></i>
+                        <h4 style="margin-bottom: 0.5rem;">Air Sealing</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5;">Insulation only works if air isn't bypassing it through structural gaps and cracks.</p>
+                    </div>
+                </div>
+
+                <!-- Small Card 2 -->
+                <div class="bento-card bento-card-small">
+                    <div>
+                        <i data-lucide="sun" style="margin-bottom: 1rem; color: var(--text-primary);"></i>
+                        <h4 style="margin-bottom: 0.5rem;">Radiant Heat</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5;">Summer heat radiates through roofs, requiring specialized thermal barriers.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Section 05: Resource Grid -->
+        <section class="section-padding container">
+            <div style="text-align: center;" class="reveal">
+                <span class="eyebrow">NEXT STEPS</span>
+                <h2>Make the Most of Your Results</h2>
+            </div>
+            
+            <div class="resource-grid reveal">
+                <!-- Resource 1 -->
+                <a href="about.html" class="resource-card">
+                    <img src="assets/images/Maximizing Your ROI.png" alt="Attic Insulation ROI" class="resource-img">
+                    <div class="resource-content">
+                        <div class="resource-tag">Guide</div>
+                        <h3 style="font-size: 1.25rem;">Maximizing Your ROI</h3>
+                        <p style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0;">Learn how to balance upfront material costs with long-term energy savings.</p>
+                    </div>
+                </a>
+                
+                <!-- Resource 2 -->
+                <a href="pricing.html" class="resource-card">
+                    <img src="assets/images/Financing Your Upgrade.png" alt="Financing Options" class="resource-img">
+                    <div class="resource-content">
+                        <div class="resource-tag">Finance</div>
+                        <h3 style="font-size: 1.25rem;">Financing Your Upgrade</h3>
+                        <p style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0;">Explore local rebates, tax credits, and flexible payment plans available.</p>
+                    </div>
+                </a>
+
+                <!-- Resource 3 -->
+                <a href="#" class="resource-card">
+                    <img src="assets/images/The Energy Audit.png" alt="Energy Audit Process" class="resource-img">
+                    <div class="resource-content">
+                        <div class="resource-tag">Process</div>
+                        <h3 style="font-size: 1.25rem;">The Energy Audit</h3>
+                        <p style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0;">What to expect when our technicians perform a professional thermal assessment.</p>
+                    </div>
+                </a>
+
+                <!-- Resource 4 -->
+                <a href="#" class="resource-card">
+                    <img src="assets/images/Interpreting Your Results.png" alt="Interpreting Results" class="resource-img">
+                    <div class="resource-content">
+                        <div class="resource-tag">Education</div>
+                        <h3 style="font-size: 1.25rem;">Interpreting Your Results</h3>
+                        <p style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0;">A deeper dive into what your calculated savings mean for your climate zone.</p>
+                    </div>
+                </a>
+                
+                <!-- Resource 5 -->
+                <a href="services.html" class="resource-card">
+                    <img src="assets/images/Common Air Leaks.png" alt="Air Leaks" class="resource-img">
+                    <div class="resource-content">
+                        <div class="resource-tag">Tips</div>
+                        <h3 style="font-size: 1.25rem;">Common Air Leaks</h3>
+                        <p style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0;">Identify the top 5 areas in your home that are secretly draining your heating.</p>
+                    </div>
+                </a>
+
+                <!-- Resource 6 -->
+                <a href="about.html" class="resource-card">
+                    <img src="assets/images/Case Studies.png" alt="Case Studies" class="resource-img">
+                    <div class="resource-content">
+                        <div class="resource-tag">Results</div>
+                        <h3 style="font-size: 1.25rem;">Case Studies</h3>
+                        <p style="font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0;">See real-world utility bill comparisons from homes that recently upgraded.</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Section 06: CTA -->
+        <section class="container" style="padding-bottom: 4rem;">
+            <div class="cta-standard reveal">
+                <h2 style="max-width: 600px; margin: 0 auto 1.5rem;">Want a More Accurate Assessment?</h2>
+                <a href="#" class="btn btn-primary" data-modal-trigger="assessment">Book a Free Assessment <i data-lucide="arrow-right"></i></a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="nav-brand" style="margin-bottom: 1rem;">
+                        <i data-lucide="shield-check" class="nav-logo-svg" style="color: var(--clr-energy-green)"></i>
+                <div class="brand-text-wrapper">
+                    <span class="brand-name">THERMOVA</span>
+                    <span class="brand-desc">Insulation & Energy</span>
+                </div>
+                    </div>
+                    <p>Professional residential and commercial insulation installation focused on improving building comfort and lowering utility bills.</p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Instagram">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        </a>
+                        <a href="#" aria-label="Facebook">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                        </a>
+                        <a href="#" aria-label="X">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="YouTube">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Explore</h4>
+                    <div class="footer-links">
+                        <a href="index.html">Home</a>
+                        <a href="about.html">About</a>
+                        <a href="services.html">Services</a>
+                        <a href="energy-calculator.html">Energy Calculator</a>
+                        <a href="pricing.html">Pricing</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <div class="footer-links">
+                        <a href="contact.html">Contact Us</a>
+                        <a href="#" data-modal-trigger="assessment">Free Assessment</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Get Practical Energy-Saving Tips</h4>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Enter your email" required>
+                        <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.5rem;">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 THERMOVA. All rights reserved.</div>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Modals -->
+    <div id="global-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close"><i data-lucide="x"></i></button>
+            <div id="modal-dynamic-content">
+                <div id="modal-assessment" class="modal-template active">
+                    <h3 style="margin-bottom: 0.5rem;">Let's Improve Your Energy Efficiency</h3>
+                    <p style="margin-bottom: 2rem;">Tell us a little about your building and we'll help you identify the right next step.</p>
+                    <form>
+                        <div class="form-group"><label>Full Name</label><input type="text" placeholder="John Doe"></div>
+                        <div class="form-group"><label>Email Address</label><input type="email" placeholder="john@example.com"></div>
+                        <div class="form-group"><label>Property Type</label><select><option>Single Family Home</option><option>Commercial Building</option></select></div>
+                        <div class="form-group"><label>ZIP / Postal Code</label><input type="text" placeholder="e.g. 10001"></div>
+                        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                            <button type="button" class="btn btn-primary" style="flex: 1;">Continue <i data-lucide="arrow-right"></i></button>
+                            <button type="button" class="btn btn-secondary modal-close-btn" style="background: transparent; color: var(--text-primary); border: 1px solid var(--border-color);">Maybe Later</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/interactions.js"></script>
+    <script src="assets/js/calculator.js"></script>
+    <script>
+        lucide.createIcons();
+        document.querySelectorAll('.modal-close-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('global-modal').classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
