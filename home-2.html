@@ -282,12 +282,16 @@
         }
 
         /* Section 6: Final CTA */
-        .cta-premium {
-            background-color: var(--clr-deep-graphite);
+        .cta-premium-card {
+            background: linear-gradient(135deg, var(--clr-forest-green) 0%, var(--clr-energy-green) 100%);
             color: white;
             text-align: center;
-            padding: 8rem 0;
+            padding: 6rem 2rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            margin: 0 auto;
         }
+
 
         @media (max-width: 1024px) {
             .hero-split { flex-direction: column; }
@@ -522,8 +526,8 @@
         </section>
 
         <!-- Section 06: Final CTA Premium -->
-        <section class="cta-premium">
-            <div class="container reveal">
+        <section class="section-padding container">
+            <div class="cta-premium-card reveal">
                 <h2 style="color: white;">Stop Paying for Energy That Escapes.</h2>
                 <p style="color: rgba(255,255,255,0.8); max-width: 600px; margin: 0 auto 2rem;">Discover where your building may be losing energy and explore practical insulation improvements.</p>
                 <a href="#" class="btn btn-primary" data-modal-trigger="assessment">Get Free Assessment</a>
@@ -651,6 +655,10 @@
         const dashGrid = document.querySelector('.dashboard-grid');
         if(dashGrid) observer.observe(dashGrid);
     </script>
+    <!-- Scroll to Top Button -->
+    <button id="scroll-to-top" aria-label="Scroll to top">
+        <i data-lucide="arrow-up"></i>
+    </button>
 </body>
 </html>
 
