@@ -31,14 +31,8 @@ function initHomeCalculator() {
 
         const resultDisplay = document.getElementById('home-calc-result');
         if (resultDisplay) {
-            animateValue(resultDisplay, 0, Math.round(annualSavings), 1500);
-            
-            // Show result card
-            const resultCard = document.getElementById('home-calc-result-card');
-            if (resultCard) {
-                resultCard.style.display = 'block';
-                setTimeout(() => resultCard.style.opacity = 1, 50);
-            }
+            const currentVal = parseInt(resultDisplay.innerText) || 0;
+            animateValue(resultDisplay, currentVal, Math.round(annualSavings), 1500);
         }
     });
 }
